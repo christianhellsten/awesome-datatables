@@ -124,16 +124,19 @@ async function writeToFile(content) {
 }
 
 async function generateMarkdownTable() {
-    let markdown = '| Name | Dependencies | License | Age (Years) | Stars | Issues | Last Commit |\n';
-    markdown += '|------|--------------|---------|-------------|-------|--------|-------------|\n';
+    let markdown = '| Name | Stars | Issues | Age (Years) |\n';
+    markdown += '|------|-------|--------|-------------|\n';
     const cache = await readCache();
 
     for (const { name, user, repo, dependencies } of repositories) {
         const repoData = await fetchRepoData(user, repo);
-        markdown += `| [${name}](https://github.com/${user}/${repo}) | ${dependencies} | ${repoData.license} | ${repoData.age} | `;
+        markdown += `| [${name}](https://github.com/${user}/${repo})<br>`;
+        markdown += `<sub>**Dependencies:** ${dependencies}<br>`;
+        markdown += `**License:** ${repoData.license}<br>`;
+        markdown += `**Last Commit:** ${new Date(repoData.lastCommit).toLocaleDateString()}</sub> | `;
         markdown += `![Stars](https://img.shields.io/github/stars/${user}/${repo}?style=social) | `;
         markdown += `![Issues](https://img.shields.io/github/issues/${user}/${repo}) | `;
-        markdown += `${new Date(repoData.lastCommit).toLocaleDateString()} |\n`;
+        markdown += `${repoData.age} |\n`;
     }
 
     markdown += `\n_Last Updated At: ${new Date().toLocaleString()}_\n`;
