@@ -1,0 +1,121 @@
+{
+  "fiduswriter/Simple-DataTables": {
+    "stars": 1198,
+    "issues": 1,
+    "license": "NOASSERTION",
+    "age": 5,
+    "lastCommit": "2023-11-28T18:33:51Z"
+  },
+  "grid-js/gridjs": {
+    "stars": 4131,
+    "issues": 109,
+    "license": "MIT",
+    "age": 3,
+    "lastCommit": "2023-01-29T14:16:39Z"
+  },
+  "ag-grid/ag-grid": {
+    "stars": 11125,
+    "issues": 84,
+    "license": "MIT",
+    "age": 8,
+    "lastCommit": "2023-12-07T10:37:46Z"
+  },
+  "olifolkerd/tabulator": {
+    "stars": 5831,
+    "issues": 170,
+    "license": "MIT",
+    "age": 8,
+    "lastCommit": "2023-08-27T14:56:10Z"
+  },
+  "wenzhixin/bootstrap-table": {
+    "stars": 11603,
+    "issues": 232,
+    "license": "MIT",
+    "age": 10,
+    "lastCommit": "2023-12-06T16:57:22Z"
+  },
+  "DataTables/DataTables": {
+    "stars": 7224,
+    "issues": 125,
+    "license": "MIT",
+    "age": 13,
+    "lastCommit": "2022-01-25T11:01:31Z"
+  },
+  "mui-org/material-ui": {
+    "stars": 89850,
+    "issues": 1682,
+    "license": "MIT",
+    "age": 9,
+    "lastCommit": "2023-12-07T08:50:51Z"
+  },
+  "tannerlinsley/react-table": {
+    "stars": 22994,
+    "issues": 210,
+    "license": "MIT",
+    "age": 7,
+    "lastCommit": "2023-11-28T16:26:12Z"
+  },
+  "nick-keller/react-datasheet-grid": {
+    "stars": 1519,
+    "issues": 41,
+    "license": "MIT",
+    "age": 3,
+    "lastCommit": "2023-07-26T19:01:26Z"
+  },
+  "glideapps/glide-data-grid": {
+    "stars": 2847,
+    "issues": 69,
+    "license": "MIT",
+    "age": 3,
+    "lastCommit": "2023-12-01T18:58:32Z"
+  },
+  "tanstack/table": {
+    "stars": 22994,
+    "issues": 210,
+    "license": "MIT",
+    "age": 7,
+    "lastCommit": "2023-11-28T16:26:12Z"
+  },
+  "mui/mui-x": {
+    "stars": 3177,
+    "issues": 1015,
+    "license": "Unknown",
+    "age": 3,
+    "lastCommit": "2023-12-06T19:01:30Z"
+  },
+  "primer/view_components": {
+    "stars": 391,
+    "issues": 17,
+    "license": "MIT",
+    "age": 3,
+    "lastCommit": "2023-12-06T16:10:31Z"
+  },
+  "github/view_component": {
+    "stars": 3047,
+    "issues": 67,
+    "license": "MIT",
+    "age": 4,
+    "lastCommit": "2023-12-04T12:23:55Z"
+  },
+  "matfish2/vue-tables-2": {
+    "stars": 1528,
+    "issues": 0,
+    "license": "GPL-3.0",
+    "age": 7,
+    "lastCommit": "2021-11-25T06:51:20Z"
+  },
+  "angular/components": {
+    "stars": 23822,
+    "issues": 2003,
+    "license": "MIT",
+    "age": 7,
+    "lastCommit": "2023-12-06T19:58:00Z"
+  },
+  "valor-software/ngx-bootstrap": {
+    "stars": 5509,
+    "issues": 560,
+    "license": "MIT",
+    "age": 8,
+    "lastCommit": "2023-11-28T18:34:58Z"
+  }
+}
