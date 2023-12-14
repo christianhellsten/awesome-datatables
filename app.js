@@ -14,10 +14,11 @@ const repositories = [
     { url: "https://github.com/olifolkerd/tabulator", dependencies: "Vanilla JS, Optional jQuery" },
     { url: "https://github.com/wenzhixin/bootstrap-table", dependencies: "jQuery, Bootstrap" },
     { url: "https://github.com/DataTables/DataTables", dependencies: "jQuery" },
+    { url: "https://github.com/DataTables/DataTablesSrc", dependencies: "jQuery 1.3+" },
     { url: "https://github.com/mui/material-ui", dependencies: "React, Material-UI" },
     { url: "https://github.com/nick-keller/react-datasheet-grid", dependencies: "React" },
     { url: "https://github.com/glideapps/glide-data-grid", dependencies: "React" },
-    { url: "https://github.com/TanStack/table", dependencies: "React" },
+    { url: "https://github.com/TanStack/table", dependencies: "Vanilla JS, Angular, React, Vue" },
     { url: "https://github.com/mui/mui-x", dependencies: "React, Material-UI" },
     { url: "https://github.com/primer/view_components", dependencies: "Rails, ViewComponent" },
     { url: "https://github.com/ViewComponent/view_component", dependencies: "Rails" },
@@ -29,7 +30,6 @@ const repositories = [
     { url: "https://github.com/xaksis/vue-good-table", dependencies: "Vue" },
     { url: "https://github.com/TonyGermaneri/canvas-datagrid", dependencies: "" },
     { url: "https://github.com/material-table-core/core", dependencies: "" },
-    //{ url: "", dependencies: "" },
     //{ url: "", dependencies: "" },
     //{ url: "", dependencies: "" },
 ];
@@ -59,6 +59,7 @@ const createTableQuery = `CREATE TABLE IF NOT EXISTS repositories (
     dependencies TEXT,
     name TEXT,
     full_name TEXT,
+    organization TEXT,
     homepage TEXT,
     html_url TEXT,
     description TEXT,
@@ -81,7 +82,7 @@ db.run(createTableQuery, (err) => {
 
 async function fetchAllRepoDataFromDB() {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM repositories ORDER BY stargazers_count DESC, issues_count ASC';
+        const query = 'SELECT * FROM repositories ORDER BY stargazers_count DESC, issues_count ASC, created_at DESC, last_commit_date DESC';
         db.all(query, [], (err, rows) => {
             if (err) {
                 reject(err);
@@ -124,6 +125,7 @@ function insertRepoData(repoData) {
     url,
     dependencies,
     full_name,
+    organization,
     html_url,
     homepage,
     description,
@@ -136,12 +138,13 @@ function insertRepoData(repoData) {
     forks_count,
     license,
     last_commit_date
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 ON CONFLICT(url) DO UPDATE SET
     name = excluded.name,
     url = excluded.url,
     dependencies = excluded.dependencies,
     full_name = excluded.full_name,
+    organization = excluded.organization,
     description = excluded.description,
     created_at = excluded.created_at,
     updated_at = excluded.updated_at,
@@ -158,6 +161,7 @@ ON CONFLICT(url) DO UPDATE SET
         repoData.url,
         repoData.dependencies,
         repoData.full_name,
+        repoData.organization,
         repoData.html_url,
         repoData.homepage,
         repoData.description,
@@ -204,16 +208,16 @@ async function fetchRepoDataFromDB(repoUrl) {
 }
 
 async function generateTable() {
-    let html = '<table><tr><th>Name</th><th>Dependencies</th><th>License</th><th>Age (Years)</th><th>Stars</th><th>Issues</th><th>Last Commit (days)</th></tr>';
+    let html = '<table><tr><th>Name</th><th>Stars</th><th>Issues</th><th>Age (years)</th><th>Last Commit (days)</th><th>Dependencies</th><th>License</th></tr>';
 
     const repoDataList = await fetchAllRepoDataFromDB();
 
     for (const repoData of repoDataList) {
         if (repoData) {
-            const age = calculateAgeInYears(repoData.created_at);
+            const ageInYears = calculateAgeInYears(repoData.created_at);
             const daysSinceLastCommit = calculateAgeInDays(repoData.last_commit_date);
 
-            html += `<tr><td><a href="${repoData.html_url}">${repoData.name}</a></td><td>${repoData.dependencies}</td><td>${repoData.license || 'Unknown'}</td><td>${age}</td><td>${repoData.stargazers_count}</td><td>${repoData.issues_count}</td><td>${daysSinceLastCommit}</td></tr>`;
+            html += `<tr><td><a href="${repoData.html_url}">${repoData.full_name}</a></td><td>${repoData.stargazers_count}</td><td>${repoData.issues_count}</td><td>${ageInYears}</td><td>${daysSinceLastCommit}</td><td>${repoData.dependencies}</td><td>${repoData.license || 'Unknown'}</td></tr>`;
         }
     }
 
@@ -223,22 +227,27 @@ async function generateTable() {
 }
 
 async function generateMarkdownTable() {
-    let markdown = '| Name | Dependencies | License | Stars | Issues | Age (Years) | Last Commit (days) |\n';
+    let markdown = `# Awesome Datatables
+
+![Contributions Welcome](https://img.shields.io/badge/Contributions-welcome-blue.svg)
+
+`;
+    markdown += '| Name | Stars | Issues | Age (Years) | Last Commit (days) | Dependencies | License |\n';
     markdown += '|------|--------------|--------|-------|--------|-------------|-------------|\n';
 
     const repoDataList = await fetchAllRepoDataFromDB();
 
     for (const repoData of repoDataList) {
-        const age = calculateAgeInYears(repoData.created_at);
+        const ageInYears = calculateAgeInYears(repoData.created_at);
         const daysSinceLastCommit = calculateAgeInDays(repoData.last_commit_date);
 
-        markdown += `| [${repoData.full_name}](https://github.com/${repoData.full_name}) | ${repoData.dependencies} | ${repoData.license || 'Unknown'} | `;
+        markdown += `| [${repoData.full_name}](https://github.com/${repoData.full_name}) | `;
         markdown += `![Stars](https://img.shields.io/github/stars/${repoData.full_name}?style=social) | `;
         markdown += `![Issues](https://img.shields.io/github/issues/${repoData.full_name}) | `;
-        markdown += `${repoData.issues_count} | ${age} | ${daysSinceLastCommit} |\n`;
+        markdown += `${ageInYears} | ${daysSinceLastCommit} | ${repoData.dependencies} | ${repoData.license || '-'} |\n`;
     }
 
-    markdown += `\n_Last Updated At: ${new Date().toLocaleString()}_\n`;
+    //markdown += `\n_Last Updated At: ${new Date().toLocaleString()}_\n`;
     return markdown;
 }
 
